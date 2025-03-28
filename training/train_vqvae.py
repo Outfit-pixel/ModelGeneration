@@ -10,9 +10,10 @@ from pathlib import Path
 import cv2
 from torchvision import transforms
 from PIL import Image
-
+import lpips 
+import torch.nn.functional as F
 from models.vqvae import Encoder, VectorQuantizer, Decoder
-from config import current_dir, image_folder, model_checkpoints, VQVAE_CONFIG, TRAIN_CONFIG
+from config import current_dir, image_folder, model_checkpoints, VQVAE_CONFIG, TRAIN_CONFIG, VQVAE_ENCODER_CONFIG,VQVAE_QUANTIZER_CONFIG
 
 class ImageDataset(torch.utils.data.Dataset):
     def __init__(self, image_folder):
@@ -38,8 +39,8 @@ def train_vqvae():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
     # Initialize models
-    encoder = Encoder(**VQVAE_CONFIG).to(device)
-    quantizer = VectorQuantizer(**VQVAE_CONFIG).to(device)
+    encoder = Encoder(**VQVAE_ENCODER_CONFIG).to(device)
+    quantizer = VectorQuantizer(**VQVAE_QUANTIZER_CONFIG).to(device)
     decoder = Decoder(**VQVAE_CONFIG).to(device)
     lpips_loss_fn = lpips.LPIPS(net='vgg').to(device)
     

@@ -1,21 +1,38 @@
+import torch
 import pathlib
 
+# Device configuration
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
 # Path configurations
-current_dir = pathlib.Path("/kaggle/working/")
-image_folder = pathlib.Path("/kaggle/input/deepfashion-1/datasets/train_images")
+current_dir = pathlib.Path("/content/drive/MyDrive/Model_Generation-anurag/Complete/ModelGeneration")
+image_folder = pathlib.Path("/content/drive/MyDrive/Model_Generation-anurag/Complete/ModelGeneration/model_data")
 model_checkpoints = current_dir / "model_checkpoints"
+
+VQVAE_ENCODER_CONFIG = {
+    "ch": 128,
+    "ch_mult": (1, 2, 4, 8),
+    "num_res_blocks": 2,
+    "in_channels": 3,
+    "z_channels": 32
+}
+
+VQVAE_QUANTIZER_CONFIG = {
+    "num_embeddings": 1024,
+    "embedding_dim": 32,
+    "beta": 0.25,
+    "decay": 0.99
+}
+
 
 # Model parameters
 VQVAE_CONFIG = {
     "ch": 128,
     "ch_mult": (1, 2, 4, 8),
     "num_res_blocks": 2,
-    "in_channels": 3,
-    "z_channels": 32,
-    "num_embeddings": 1024,
-    "embedding_dim": 32,
-    "beta": 0.25,
-    "decay": 0.99
+    "in_channels": 32,
+    "out_channels": 3
 }
 
 TRANSFORMER_CONFIG = {

@@ -4,8 +4,8 @@ from training.train_vqvae import train_vqvae
 from training.train_transformer import train_transformer
 from utils import clear_memory, save_encoding_indices
 from models.vqvae import Encoder, VectorQuantizer
-from config import current_dir, image_folder, device, VQVAE_CONFIG
-
+from config import current_dir, image_folder, device, VQVAE_CONFIG,VQVAE_ENCODER_CONFIG,VQVAE_QUANTIZER_CONFIG
+import torch
 def main():
     # Step 1: Generate captions for images
     print("Step 1: Generating captions...")
@@ -23,8 +23,8 @@ def main():
     
     # Step 4: Generate encoding indices
     print("\nStep 4: Generating encoding indices...")
-    encoder = Encoder(**VQVAE_CONFIG).to(device)
-    quantizer = VectorQuantizer(**VQVAE_CONFIG).to(device)
+    encoder = Encoder(**VQVAE_ENCODER_CONFIG).to(device)
+    quantizer = VectorQuantizer(**VQVAE_QUANTIZER_CONFIG).to(device)
     encoder.load_state_dict(torch.load(current_dir / "model_checkpoints"/ "final_encoder.pth"))
     quantizer.load_state_dict(torch.load(current_dir / "model_checkpoints"/ "final_quantizer.pth"))
     save_encoding_indices(image_folder, encoder, quantizer, device, current_dir)

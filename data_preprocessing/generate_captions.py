@@ -9,7 +9,7 @@ from config import current_dir, image_folder
 def generate_captions():
     device = "cuda" if torch.cuda.is_available() else "cpu"
     processor = Blip2Processor.from_pretrained("Salesforce/blip2-opt-2.7b")
-    model = Blip2ForConditionalGeneration.from_pretrained("Salesforce/blip2-opt-2.7b", torch_dtype=torch.float16)
+    model = Blip2ForConditionalGeneration.from_pretrained("Salesforce/blip2-opt-2.7b", torch_dtype=torch.float32)
     model.to(device)
 
     output_json = current_dir / "captions.json"
